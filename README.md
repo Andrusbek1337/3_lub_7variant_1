@@ -68,7 +68,125 @@
 Необходимо выполнить следующие задачи:
 1. Вывести на экран сколько часов соответствуют времени 34056
 2. Вывести на экран сколько минут соответствуют времени 4532
-3. Вывести на экран сколько секунд соответствуют времени 123
 
-## Задание 1.
+
+
+1. Класс Name (name.h / name.cpp)
+Назначение: Сущность "Имя" с фамилией, личным именем и отчеством.
+
+#### Поля (private):
+    lastName_ - фамилия (string)
+    firstName_ - личное имя (string)
+    middleName_ - отчество (string)
+    hasLastName_ - флаг наличия фамилии (bool)
+    hasFirstName_ - флаг наличия имени (bool)
+    hasMiddleName_ - флаг наличия отчества (bool)
+
+#### Методы (public):
+    Name() - конструктор по умолчанию
+    Name(const string& last) - конструктор с фамилией
+    Name(const string& last, const string& first) - конструктор с фамилией и именем
+    Name(const string& last, const string& first, const string& middle) - полный конструктор
+    toString() const - преобразование к строковому виду
+    print() const - вывод на экран
+
+##### Алгоритм решения задачи 1:
+    Создаем объекты Name с разными параметрами:
+    Name("Клеопатра") - только личное имя
+    Name("Пушкин", "Александр", "Сергеевич") - полное имя
+    Name("Маяковский", "Владимир") - фамилия и имя
+    Метод toString() формирует строку, проверяя какие компоненты заданы
+    Не заданные компоненты не включаются в итоговую строку
+    Выводим результат с помощью print()
+
+2. Класс Department (department.h / department.cpp)
+Назначение: Сущность "Отдел" с названием и сотрудниками.
+
+#### Поля (private):
+    name_ - название отдела (string)
+    head_ - указатель на начальника (Employee*)
+    employees_ - вектор сотрудников отдела (vector<Employee*>)
+
+#### Методы (public):
+    Department(const string& name) - конструктор
+    getName() const - получить название отдела
+    setHead(Employee* head) - назначить начальника
+    getHead() const - получить начальника
+    addEmployee(Employee* employee) - добавить сотрудника
+    print() const - вывести информацию об отделе
+    printEmployees() const - вывести список сотрудников
+
+3. Класс Employee (employee.h / employee.cpp)
+Назначение: Сущность "Сотрудник" с именем и ссылкой на отдел.
+
+#### Поля (private):
+    name_ - имя сотрудника (string)
+    department_ - указатель на отдел (Department*)
+
+#### Методы (public):
+    Employee(const string& name, Department* department = nullptr) - конструктор
+    getName() const - получить имя сотрудника
+    getDepartment() const - получить отдел
+    isHead() const - проверить, является ли начальником
+    print() const - вывести информацию о сотруднике
+
+#### Алгоритм решения задачи 2-3:
+    Создаем отдел IT: Department itDepartment("IT")
+    Создаем сотрудников и связываем с отделом:
+    Employee petrov("Петров", &itDepartment)
+    Employee kozlov("Козлов", &itDepartment)
+    Employee sidorov("Сидоров", &itDepartment)
+    Назначаем Козлова начальником: itDepartment.setHead(&kozlov)
+    При выводе сотрудника:
+    Если он начальник: "Имя начальник отдела Название"
+    Если рядовой сотрудник: "Имя работает в отделе Название, начальник которого Имя"
+    Для задачи 3: любой сотрудник может получить список всех сотрудников своего отдела через department_->getAllEmployees()
+
+4. Класс Time (time.h / time.cpp)
+Назначение: Сущность "Время" в 24-часовом формате.
+
+#### Поля (private):
+    totalSeconds_ - секунды с начала суток (int)
+    init_(int seconds) - приватный метод инициализации
+
+#### Методы (public):
+    Time() - конструктор по умолчанию
+    Time(int seconds) - конструктор из секунд
+    Time(int hours, int minutes, int seconds) - конструктор из компонентов
+    getCurrentHour() const - получить текущий час
+    getMinutesFromHourStart() const - получить минуты с начала часа
+    getSecondsFromMinuteStart() const - получить секунды с начала минуты
+    getFullHours(int seconds) - статический метод: часы из секунд
+    getFullMinutes(int seconds) - статический метод: минуты из секунд
+    getFullSeconds(int seconds) - статический метод: секунды из секунд
+    getCurrentTime() - статический метод: текущее системное время
+    toString() const - преобразовать к строке "ЧЧ:ММ:СС"
+    print() const - вывести время
+    printBrief() const - краткий вывод времени
+
+#### Алгоритм решения задачи 4:
+    Время хранится как секунды с начала суток
+    Конструкторы:
+    Time(10000) - из секунд (34056, 4532, 123)
+    Time(2, 3, 5) - из часов, минут, секунд
+    Автоматическое приведение времени >24 часов: seconds % (24*3600)
+    Метод toString() форматирует вывод в "ЧЧ:ММ:СС"
+
+#### Алгоритм решения задачи 5:
+    Метод getCurrentHour(): totalSeconds_ / 3600
+    Для 34056 сек: 34056 / 3600 = 9 часов
+    Метод getMinutesFromHourStart(): (totalSeconds_ % 3600) / 60
+    Для 4532 сек: (4532 % 3600) / 60 = 932 / 60 = 15 минут
+    Метод getSecondsFromMinuteStart(): totalSeconds_ % 60
+    Для 123 сек: 123 % 60 = 3 секунды
+    Статические методы работают без создания объекта:
+    Time::getFullHours(34056) вернет 9
+    Time::getFullMinutes(4532) вернет 15
+    Time::getFullSeconds(123) вернет 3
+
+# Тестирование:
+<img width="688" height="1128" alt="image" src="https://github.com/user-attachments/assets/9895b771-baad-467b-ae81-44e20d8e53eb" />
+<img width="756" height="1057" alt="image" src="https://github.com/user-attachments/assets/ae0d208e-01a4-42da-aca4-36a34fdd1c3c" />
+<img width="651" height="1274" alt="image" src="https://github.com/user-attachments/assets/6ab6f742-16e7-42c2-9b7c-abff83686c0f" />
+
 
